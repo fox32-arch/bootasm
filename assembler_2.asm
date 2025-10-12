@@ -1,9 +1,5 @@
 ; continues from assembler_1.asm
 assembler_2:
-    push r0
-    movz.8 r0, 10
-    call r18
-    pop r0
     call r19
     movz.8 r0, 10
     call r18
@@ -48,26 +44,22 @@ write_source_target_byte:
     rjmp.16 write_source_target_end
 write_source_target_half:
     mov.16 [r10], r0
+    mov r31, 2
+write_source_target_half_loop:
     call r16
     call r17
     sra r0, 8
-    call r16
-    call r17
+    rloop.8 write_source_target_half_loop
     inc r10, 2
     rjmp.16 write_source_target_end
 write_source_target_word:
     mov [r10], r0
+    mov r31, 4
+write_source_target_word_loop:
     call r16
     call r17
     sra r0, 8
-    call r16
-    call r17
-    sra r0, 8
-    call r16
-    call r17
-    sra r0, 8
-    call r16
-    call r17
+    rloop.8 write_source_target_word_loop
     inc r10, 4
     rjmp.16 write_source_target_end
 

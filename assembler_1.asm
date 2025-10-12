@@ -49,17 +49,17 @@ instr_error:
     call [ROM_print_string_to_monitor]
     ret
 instr_size_3:
-    mov.8 [r1+3], 0
-    cmp.16 [r1+4], 0x3631 ; "16"
-    ifz mov.8 [current_size], 1
-    cmp.8 [r1+4], '8'
-    ifz mov.8 [current_size], 0
-    rjmp.16 instr_check
+    mov r6, r1
+    add r6, 3
+    rjmp.8 instr_size
 instr_size_4:
-    mov.8 [r1+4], 0
-    cmp.16 [r1+5], 0x3631 ; "16"
+    mov r6, r1
+    inc r6, 4
+instr_size:
+    mov.8 [r6], 0
+    cmp.16 [r6+1], 0x3631 ; "16"
     ifz mov.8 [current_size], 1
-    cmp.8 [r1+5], '8'
+    cmp.8 [r6+1], '8'
     ifz mov.8 [current_size], 0
     rjmp.16 instr_check
 instr_found:
@@ -120,5 +120,9 @@ write_opcode:
     mov r3, r2
     rcall.16 write_source_target ; write target
 no_target:
+    push r0
+    movz.8 r0, 10
+    call r18
+    pop r0
     ; continues in assembler_2.asm
     rjmp.16 assembler_2
