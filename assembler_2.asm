@@ -19,12 +19,14 @@ write_source_target:
     ifz movz.8 r1, 10
     ifz inc r3
     cmp.8 [r3], '['
-    ifz movz.8 r11, 2 ; immediate pointers are always 32 bits long
-    ifz inc r3
-    cmp.16 [r3], 0x725B ; "[r"
+    ifnz rjmp.8 write_source_target_cont
+    movz.8 r11, 2 ; immediate pointers are always 32 bits long
+    inc r3
+    cmp.8 [r3], 'r' ; "[r", r3 incremented once above
     ifz movz.8 r11, 0
     ifz movz.8 r1, 10
-    ifz inc r3, 2
+    ifz inc r3 ; already incremented once above
+write_source_target_cont:
     mov r0, r3
     call [ROM_string_to_int]
     cmp.8 r11, 0
